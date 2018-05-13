@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 
 //资源服务配置
 @Configuration
-@EnableResourceServer
+@EnableResourceServer //启用资源服务器
 public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
 
     @Override
@@ -17,6 +17,8 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
             .authenticated()
         .and()
             .requestMatchers()
+
+            //配置哪些资源 需要使用 oauth2 认证，这里 访问 /api　下的资源就必须带着　token 来访问
             .antMatchers("/api/**");
     }
 

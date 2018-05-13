@@ -1,11 +1,11 @@
 package io.spring2go.clientresttemplate;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 @SpringBootApplication
 public class ClientRestTemplateApplication implements ServletContextInitializer {
@@ -16,6 +16,7 @@ public class ClientRestTemplateApplication implements ServletContextInitializer 
 
     @Override
     public void onStartup(ServletContext context) throws ServletException {
+        // 设置 session　的名字
         context.getSessionCookieConfig().setName("client-session");
     }
 

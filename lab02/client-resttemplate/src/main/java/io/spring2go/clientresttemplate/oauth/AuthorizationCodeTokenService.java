@@ -1,13 +1,5 @@
 package io.spring2go.clientresttemplate.oauth;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -16,19 +8,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class AuthorizationCodeTokenService {
     @Autowired
     private AuthorizationCodeConfiguration configuration;
 
     public String getAuthorizationEndpoint() {
+        // 授权服务器 url
         String endpoint = "http://localhost:8080/oauth/authorize";
 
+        // 授权相关参数
         Map<String, String> authParameters = new HashMap<>();
         authParameters.put("client_id", "clientapp");
-        authParameters.put("response_type", "code");
+        authParameters.put("response_type", "code"); //使用 授权码的方式 获取 access_token
         authParameters.put("redirect_uri",
-                getEncodedUrl("http://localhost:9001/callback"));
+                getEncodedUrl("http://localhost:9001/callback")); //回调的地址
         authParameters.put("scope", getEncodedUrl("read_userinfo"));
 
         return buildUrl(endpoint, authParameters);
@@ -42,7 +44,7 @@ public class AuthorizationCodeTokenService {
         });
 
         return endpoint + "?" + paramList.stream()
-              .reduce((a, b) -> a + "&" + b).get();
+                .reduce((a, b) -> a + "&" + b).get();
     }
 
     private String getEncodedUrl(String url) {
@@ -53,15 +55,24 @@ public class AuthorizationCodeTokenService {
         }
     }
 
+    /**
+     * 通过 code(授权码) 获取  token
+     *
+     * @param authorizationCode
+     * @return
+     */
     public OAuth2Token getToken(String authorizationCode) {
         RestTemplate rest = new RestTemplate();
+
+        //拼装 客户端认证 信息
         String authBase64 = configuration.encodeCredentials("clientapp",
                 "112233");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = new RequestEntity<>(
-            configuration.getBody(authorizationCode),
-            configuration.getHeader(authBase64), HttpMethod.POST,
-            URI.create("http://localhost:8080/oauth/token"));
+                configuration.getBody(authorizationCode),
+                configuration.getHeader(authBase64),
+                HttpMethod.POST,
+                URI.create("http://localhost:8080/oauth/token"));
 
         ResponseEntity<OAuth2Token> responseEntity = rest.exchange(
                 requestEntity, OAuth2Token.class);

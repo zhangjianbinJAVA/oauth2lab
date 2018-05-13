@@ -40,13 +40,19 @@ public class OAuth2Configuration {
         AuthorizationCodeServices codeServices = authorizationCodeServices();
 
         AuthorizationServerTokenServices tokenServices = tokenServices();
+
+        // 支持授权 模式的 集合
         List<TokenGranter> tokenGranters = Arrays.asList(
+                // 支持 授权码模式
                 new AuthorizationCodeTokenGranter(tokenServices, codeServices, clientDetailsService(), requestFactory),
+                // 支持 用户名和密码 模式
                 new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService(), requestFactory),
+                // 支持 隐含模式
                 new ImplicitTokenGranter(tokenServices, clientDetailsService(), requestFactory));
 
         return new CompositeTokenGranter(tokenGranters);
     }
+
 
     @Bean
     public ClientDetailsService clientDetailsService() {
@@ -61,6 +67,9 @@ public class OAuth2Configuration {
         return tokenServices;
     }
 
+    /**
+     * @return
+     */
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);

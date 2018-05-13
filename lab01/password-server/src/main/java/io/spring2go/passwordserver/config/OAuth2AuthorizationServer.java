@@ -29,8 +29,8 @@ public class OAuth2AuthorizationServer extends
             throws Exception {
         clients.inMemory()
             .withClient("clientapp")
-            .secret("112233")
-            // 密码模式
+            .secret("112233") // 用户凭证
+            // 只支持 密码模式
             .authorizedGrantTypes("password")
             .scopes("read_userinfo", "read_contacts");
     }

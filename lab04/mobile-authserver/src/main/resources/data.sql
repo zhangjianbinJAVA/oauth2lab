@@ -1,4 +1,6 @@
 -- create the database structure for OAuth2
+
+-- oauth客户详细信息
 create table oauth_client_details (
   client_id VARCHAR(256) PRIMARY KEY,
   resource_ids VARCHAR(256),
@@ -13,6 +15,7 @@ create table oauth_client_details (
   autoapprove VARCHAR(256)
 );
 
+-- oauth访问令牌
 create table oauth_access_token (
   token_id VARCHAR(256),
   token BINARY,
@@ -23,6 +26,7 @@ create table oauth_access_token (
   refresh_token VARCHAR(256)
 );
 
+-- oauth 批准
 create table oauth_approvals (
     userId VARCHAR(256),
     clientId VARCHAR(256),
@@ -33,6 +37,7 @@ create table oauth_approvals (
 );
 
 -- insert a default client credentials
+-- 插入一个默认的客户端凭证
 insert into oauth_client_details
 (client_id, client_secret, scope,
  authorized_grant_types, web_server_redirect_uri)
@@ -40,3 +45,5 @@ values
 ('mobileclient', '112233', 'read_userinfo,read_contacts',
 'authorization_code,implicit,password', 'oauth2://userinfo/callback,http://localhost:9000/callback'
 );
+
+-- oauth2://userinfo/callback  app 的url跳转

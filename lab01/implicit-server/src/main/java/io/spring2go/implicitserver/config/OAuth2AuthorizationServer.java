@@ -18,9 +18,9 @@ public class OAuth2AuthorizationServer extends
             .withClient("clientapp")
             .secret("112233")
             .redirectUris("http://localhost:9001/callback")
-            // 简化模式
+            // 只支持简化模式
             .authorizedGrantTypes("implicit")
-            .accessTokenValiditySeconds(120)
+            .accessTokenValiditySeconds(120) //令牌的有效期 120秒
             .scopes("read_userinfo", "read_contacts");
     }
 

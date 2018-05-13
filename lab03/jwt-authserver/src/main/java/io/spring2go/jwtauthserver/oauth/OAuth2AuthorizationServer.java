@@ -15,39 +15,56 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
+    // 使用 用户名密码模式时，需要 启用 AuthenticationManager
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("test-secret");
-        return converter;
-    }
 
-    @Bean
-    public JwtTokenStore jwtTokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
-    }
-
+    /**
+     * 配置 授权 端点相关信息
+     *
+     * @param endpoints
+     * @throws Exception
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-            .authenticationManager(authenticationManager)
-            .tokenStore(jwtTokenStore())
-            .accessTokenConverter(accessTokenConverter());
+                .authenticationManager(authenticationManager)
+                .tokenStore(jwtTokenStore()) //jwt 生成 token
+                .accessTokenConverter(accessTokenConverter()); // token 签名
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-            .withClient("clientapp")
-            .secret("112233")
-            .scopes("read_userinfo")
-            .authorizedGrantTypes(
-                "password",
-                "authorization_code",
-                "refresh_token");
+                .withClient("clientapp")
+                .secret("112233") // 客户凭证
+                .scopes("read_userinfo")
+
+                // 支持 多种授权模式
+                .authorizedGrantTypes(
+                        "password",
+                        "authorization_code",
+                        "refresh_token");
+    }
+
+
+    /**
+     * 由 JwtTokenStore 产生令牌
+     *
+     * @return
+     */
+    @Bean
+    public JwtTokenStore jwtTokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        //添加 签名秘钥
+        converter.setSigningKey("test-secret");
+        return converter;
     }
 
 }

@@ -30,3 +30,7 @@ curl -X GET http://localhost:8080/api/userinfo -H "authorization: Bearer 58a02fd
     "email": "bobo@spring2go.com"
 }
 ```
+
+**postman**
+
+http://localhost:8080/oauth/token?grant_type=password&username=bobo&password=xyz&scope=read_userinfo

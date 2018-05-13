@@ -41,3 +41,6 @@ curl -X GET http://localhost:8080/api/userlist -H "authorization: Bearer 776b162
     }
 ]
 ```
+
+**pastman**
+http://localhost:8080/oauth/token?grant_type=client_credentials&scope=devops

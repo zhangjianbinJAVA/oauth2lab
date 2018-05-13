@@ -11,6 +11,8 @@ http://localhost:8080/oauth/authorize?client_id=clientapp&redirect_uri=http://lo
 
 响应案例：
 
+返回的 access_token 在浏览器的地址栏中，相比 授权码模式 获取 access_token 要简单的多
+
 http://localhost:9001/callback#access_token=0406040a-779e-4b5e-adf1-bf2f02031e83&token_type=bearer&state=abc&expires_in=119
 
 ### 2. 调用API

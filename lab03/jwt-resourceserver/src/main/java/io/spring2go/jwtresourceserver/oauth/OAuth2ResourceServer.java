@@ -8,12 +8,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableResourceServer
 public class OAuth2ResourceServer extends
-    ResourceServerConfigurerAdapter {
+        ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-            .anyRequest().authenticated().and()
-            .requestMatchers().antMatchers("/api/**");
+                .authorizeRequests()
+                .anyRequest().authenticated().and()
+                .requestMatchers()
+
+                // 所有对 /api 的访问，都需要校验
+                .antMatchers("/api/**");
     }
 }

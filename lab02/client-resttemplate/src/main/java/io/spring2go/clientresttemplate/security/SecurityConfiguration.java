@@ -18,13 +18,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
+        // 登录时，使用数据库中的用户和密码
         auth.userDetailsService(userDetailsService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests().antMatchers("/", "/index.html").permitAll().anyRequest().authenticated().and()
+            .authorizeRequests()
+                .antMatchers("/", "/index.html")  // 不需要登录的，其它的都需要登录
+                .permitAll().anyRequest().authenticated().and()
             .formLogin().and()
             .logout().permitAll().and()
             .csrf().disable();
