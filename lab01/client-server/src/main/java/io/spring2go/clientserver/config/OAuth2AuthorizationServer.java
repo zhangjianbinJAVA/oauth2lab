@@ -5,7 +5,9 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
-// 授权服务器配置
+/**
+ * 授权服务器配置
+ */
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServer extends
@@ -15,11 +17,12 @@ public class OAuth2AuthorizationServer extends
     public void configure(ClientDetailsServiceConfigurer clients)
             throws Exception {
         clients.inMemory()
-            .withClient("clientdevops")
-            // 密码模式
-            .secret("789")
-            .authorizedGrantTypes("client_credentials")
-            .scopes("devops");
+                .withClient("clientdevops")
+                // 密码模式
+                .secret("789")
+                // 客户端模式
+                .authorizedGrantTypes("client_credentials")
+                .scopes("devops");
     }
 
 }

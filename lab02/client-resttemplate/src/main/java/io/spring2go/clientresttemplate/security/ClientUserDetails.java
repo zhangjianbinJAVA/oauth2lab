@@ -1,12 +1,12 @@
 package io.spring2go.clientresttemplate.security;
 
-import java.util.Collection;
-import java.util.HashSet;
-
+import io.spring2go.clientresttemplate.entity.ClientUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import io.spring2go.clientresttemplate.user.ClientUser;
+import java.util.Collection;
+import java.util.HashSet;
+
 
 public class ClientUserDetails implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -26,11 +26,21 @@ public class ClientUserDetails implements UserDetails {
         return new HashSet<>();
     }
 
+    /**
+     * 获取密码
+     *
+     * @return
+     */
     @Override
     public String getPassword() {
         return clientUser.getPassword();
     }
 
+    /**
+     * 获取 用户名
+     *
+     * @return
+     */
     @Override
     public String getUsername() {
         return clientUser.getUsername();

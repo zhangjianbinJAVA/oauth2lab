@@ -1,8 +1,12 @@
-package io.spring2go.clientresttemplate.user;
+package io.spring2go.clientresttemplate.web;
 
+import io.spring2go.clientresttemplate.dao.UserRepository;
+import io.spring2go.clientresttemplate.entity.ClientUser;
 import io.spring2go.clientresttemplate.oauth.AuthorizationCodeTokenService;
 import io.spring2go.clientresttemplate.oauth.OAuth2Token;
 import io.spring2go.clientresttemplate.security.ClientUserDetails;
+import io.spring2go.clientresttemplate.user.Entry;
+import io.spring2go.clientresttemplate.user.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -56,10 +60,13 @@ public class MainPage {
         //通过 授权码 code 获取 access_token
         OAuth2Token token = tokenService.getToken(code);
 
+        // 设置获取到的 access_token
         clientUser.setAccessToken(token.getAccessToken());
 
         Calendar tokenValidity = Calendar.getInstance();
-        tokenValidity.setTime(new Date(Long.parseLong(token.getExpiresIn()))); // access_token 的有效期
+
+        // access_token 的有效期
+        tokenValidity.setTime(new Date(Long.parseLong(token.getExpiresIn())));
         clientUser.setAccessTokenValidity(tokenValidity);
 
         // 保存 信息 ，通过 授权码code 已经交换到了 access_token 令牌了，并保存起来
@@ -69,6 +76,7 @@ public class MainPage {
         return new ModelAndView("redirect:/mainpage");
     }
 
+
     @GetMapping("/mainpage")
     public ModelAndView mainpage() {
         ClientUserDetails userDetails = (ClientUserDetails) SecurityContextHolder
@@ -77,8 +85,9 @@ public class MainPage {
         // 获取 用户数据
         ClientUser clientUser = userDetails.getClientUser();
 
-        if (StringUtils.isEmpty(clientUser.getAccessToken())) {//没用令牌时，需要去授权服务器进行授权 1.先获取授权码code 2。通过授权码获取token
-            //获取 授权端点
+        //没用令牌时，需要去授权服务器进行授权 1.先获取授权码code 2。通过授权码获取token
+        if (StringUtils.isEmpty(clientUser.getAccessToken())) {
+            //获取 授权端点 http://localhost:8080/oauth/authorize?scope=read_userinfo&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A9001%2Fcallback&client_id=clientapp
             String authEndpoint = tokenService.getAuthorizationEndpoint();
             //重定向到 授权端点
             return new ModelAndView("redirect:" + authEndpoint);
@@ -97,6 +106,12 @@ public class MainPage {
         return mv;
     }
 
+    /**
+     * 通过 access_token 获取 资源服务器上的资源信息
+     *
+     * @param mv
+     * @param token
+     */
     private void tryToGetUserInfo(ModelAndView mv, String token) {
         RestTemplate restTemplate = new RestTemplate();
 

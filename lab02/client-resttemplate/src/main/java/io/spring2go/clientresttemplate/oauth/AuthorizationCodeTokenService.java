@@ -16,11 +16,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 授权相关的逻辑
+ */
 @Service
 public class AuthorizationCodeTokenService {
     @Autowired
     private AuthorizationCodeConfiguration configuration;
 
+    /**
+     * 获取 授权端点
+     * <p>
+     * 拼接授权 url
+     *
+     * @return
+     */
     public String getAuthorizationEndpoint() {
         // 授权服务器 url
         String endpoint = "http://localhost:8080/oauth/authorize";
@@ -31,6 +41,7 @@ public class AuthorizationCodeTokenService {
         authParameters.put("response_type", "code"); //使用 授权码的方式 获取 access_token
         authParameters.put("redirect_uri",
                 getEncodedUrl("http://localhost:9001/callback")); //回调的地址
+
         authParameters.put("scope", getEncodedUrl("read_userinfo"));
 
         return buildUrl(endpoint, authParameters);
@@ -69,11 +80,14 @@ public class AuthorizationCodeTokenService {
                 "112233");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = new RequestEntity<>(
+                // 拼装 请求 body
                 configuration.getBody(authorizationCode),
+                // 拼装 请求头
                 configuration.getHeader(authBase64),
                 HttpMethod.POST,
                 URI.create("http://localhost:8080/oauth/token"));
 
+        // json 转为 实体
         ResponseEntity<OAuth2Token> responseEntity = rest.exchange(
                 requestEntity, OAuth2Token.class);
 

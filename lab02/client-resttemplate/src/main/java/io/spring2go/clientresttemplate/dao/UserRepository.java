@@ -1,8 +1,9 @@
-package io.spring2go.clientresttemplate.user;
+package io.spring2go.clientresttemplate.dao;
+
+import io.spring2go.clientresttemplate.entity.ClientUser;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
-
-import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<ClientUser, Long> {
 

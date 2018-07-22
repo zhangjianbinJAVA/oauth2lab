@@ -15,13 +15,15 @@ public class OAuth2AuthorizationServer extends
     public void configure(ClientDetailsServiceConfigurer clients)
             throws Exception {
         clients.inMemory()
-            .withClient("clientapp")
-            .secret("112233")
-            .redirectUris("http://localhost:9001/callback")
-            // 只支持简化模式
-            .authorizedGrantTypes("implicit")
-            .accessTokenValiditySeconds(120) //令牌的有效期 120秒
-            .scopes("read_userinfo", "read_contacts");
+                .withClient("clientapp")
+                .secret("112233")
+
+                // 客户端回调地址
+                .redirectUris("http://localhost:9001/callback")
+                // 只支持简化模式
+                .authorizedGrantTypes("implicit")
+                .accessTokenValiditySeconds(120) //令牌的有效期 120秒
+                .scopes("read_userinfo", "read_contacts");
     }
 
 }

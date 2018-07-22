@@ -16,23 +16,30 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("bobo").password("xyz").roles("USER");
-	}
+    /**
+     * 用户信息存于内存中
+     *
+     * @param auth
+     * @throws Exception
+     */
+    @Autowired
+    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("bobo").password("xyz").roles("USER");
+    }
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/h2-console*/**", "/webjars/**", "/images/**", "/oauth/uncache_approvals",
-				"/oauth/cache_approvals");
-	}
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // 哪些 url 不校验
+        web.ignoring().antMatchers("/h2-console*/**", "/webjars/**", "/images/**", "/oauth/uncache_approvals",
+                "/oauth/cache_approvals");
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/oauth/**").authenticated().and().csrf()
-				.requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable().formLogin()
-				.permitAll().and().logout().permitAll().and();
+        http.authorizeRequests().antMatchers("/oauth/**").authenticated().and().csrf()
+                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable().formLogin()
+                .permitAll().and().logout().permitAll().and();
 
-	}
+    }
 }

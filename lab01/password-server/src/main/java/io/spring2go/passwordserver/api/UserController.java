@@ -16,6 +16,7 @@ public class UserController {
     public ResponseEntity<UserInfo> getUerInfo() {
         User user = (User) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
+
         String email = user.getUsername() + "@spring2go.com";
 
         UserInfo userInfo = new UserInfo();

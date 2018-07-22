@@ -12,10 +12,11 @@
 http://localhost:8080/oauth/authorize?client_id=clientapp&redirect_uri=http://localhost:9001/callback&response_type=code&scope=read_userinfo
 
 **参数**
-- client_id
-- redirect_uri :重定向的 uri
+- client_id :表示客户端的ID，用来标志授权请求的来源，必选项   
+- redirect_uri :成功授权后的回调地址
 - response_type ：通过哪种方式授权，这里 通过授权码的方式进行授权
-- scope：授权信息
+- scope：表示申请的权限范围，可选项；
+- state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。
 
 **注意：state参数暂忽略**
 
@@ -43,9 +44,14 @@ curl -X POST --user clientapp:112233 http://localhost:8080/oauth/token -H
 **postman**
 - basic auth  username:clientapp   password:112233
 - heads  content-type:application/x-www-form-urlencoded
-- post 请求url 及参数    
+- post 请求url 及参数 申请令牌
 http://localhost:8080/oauth/token?code=Jar7Qz&grant_type=authorization_code&redirect_uri=http://localhost:9001/callback&scope=read_userinfo
 
+- grant_type：表示授权类型，此处的值固定为"authorization_code"，必选项；
+- client_id：用来标志请求的来源，必选项；(如：表示从QQ互联平台申请到的客户端ID)
+- client_secret：机密信息十分重要，必选项；(如： 这个是从QQ互联平台申请到的客户端认证密钥)
+- redirect_uri：成功申请到令牌后的回调地址；
+- code：上一步申请到的授权码。
 
 ```json
 {
@@ -55,7 +61,9 @@ http://localhost:8080/oauth/token?code=Jar7Qz&grant_type=authorization_code&redi
     "scope": "read_userinfo"
 }
 ```
-
+- access_token：令牌
+- expires_in：access token的有效期，单位为秒。
+- refresh_token：在授权自动续期步骤中，获取新的Access_Token时需要提供的参数
 
 
 ### 3. 调用API

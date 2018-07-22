@@ -15,6 +15,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * 使用数据库中的账号登录，userDetailsService 是 自定义类 ClientUserDetailsService
+     *
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
@@ -22,15 +28,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService);
     }
 
+    /**
+     * 资源安全拦截
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/", "/index.html")  // 不需要登录的，其它的都需要登录
                 .permitAll().anyRequest().authenticated().and()
-            .formLogin().and()
-            .logout().permitAll().and()
-            .csrf().disable();
+                .formLogin().and()
+                .logout().permitAll().and()
+                .csrf().disable();
     }
 
 }

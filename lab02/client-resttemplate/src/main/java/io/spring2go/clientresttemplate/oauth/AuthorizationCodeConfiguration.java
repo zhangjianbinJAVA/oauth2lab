@@ -1,17 +1,24 @@
 package io.spring2go.clientresttemplate.oauth;
 
-import java.util.Arrays;
-import java.util.Base64;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Arrays;
+import java.util.Base64;
+
 @Component
 public class AuthorizationCodeConfiguration {
 
+    /**
+     * 客户端凭证
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     public String encodeCredentials(String username, String password) {
         String credentials = username + ":" + password;
         String encoded = new String(Base64.getEncoder().encode(
@@ -20,6 +27,12 @@ public class AuthorizationCodeConfiguration {
         return encoded;
     }
 
+    /**
+     * 授权 请求体
+     *
+     * @param authorizationCode
+     * @return
+     */
     public MultiValueMap<String, String> getBody(String authorizationCode) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "authorization_code");
@@ -29,6 +42,12 @@ public class AuthorizationCodeConfiguration {
         return formData;
     }
 
+    /**
+     * 根据 token 获取数据 请求头
+     *
+     * @param clientAuthentication
+     * @return
+     */
     public HttpHeaders getHeader(String clientAuthentication) {
         HttpHeaders httpHeaders = new HttpHeaders();
 

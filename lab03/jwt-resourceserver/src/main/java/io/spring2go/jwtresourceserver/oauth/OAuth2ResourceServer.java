@@ -16,7 +16,7 @@ public class OAuth2ResourceServer extends
                 .anyRequest().authenticated().and()
                 .requestMatchers()
 
-                // 所有对 /api 的访问，都需要校验
+                // 所有对 /api 的访问，都需要token校验
                 .antMatchers("/api/**");
     }
 }

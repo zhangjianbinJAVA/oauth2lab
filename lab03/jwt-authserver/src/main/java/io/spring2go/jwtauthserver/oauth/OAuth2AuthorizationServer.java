@@ -34,6 +34,12 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
                 .accessTokenConverter(accessTokenConverter()); // token 签名
     }
 
+    /**
+     * client客户端的信息配置
+     *
+     * @param clients
+     * @throws Exception
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
@@ -50,7 +56,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
 
 
     /**
-     * 由 JwtTokenStore 产生令牌
+     * token 由 JwtTokenStore 产生令牌
      *
      * @return
      */

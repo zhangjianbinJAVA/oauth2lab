@@ -47,3 +47,7 @@ values
 );
 
 -- oauth2://userinfo/callback  app 的url跳转
+
+
+-- http://localhost:8080/oauth/authorize?client_id=mobileclient&redirect_uri=http://localhost:9000/callback&response_type=code&scope=read_userinfo
+-- http://localhost:8080/oauth/token?code=82S75Z&grant_type=authorization_code&redirect_uri=http://localhost:9000/callback&scope=read_userinfo

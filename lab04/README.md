@@ -17,3 +17,11 @@ AuthCodeApp\app\src\main\java\spring2go\io\authcodeapp\client\ClientAPI中的BAS
 ```
 data\data\spring2go.io.authcodeapp\shared_prefs
 ```
+
+
+#### web页面登录 h2数据据
+http://127.0.0.1:8080/h2-console/
+
+#### 通过 postman 访问授权码模式
+- http://localhost:8080/oauth/authorize?client_id=mobileclient&redirect_uri=http://localhost:9000/callback&response_type=code&scope=read_userinfo
+- http://localhost:8080/oauth/token?code=82S75Z&grant_type=authorization_code&redirect_uri=http://localhost:9000/callback&scope=read_userinfo

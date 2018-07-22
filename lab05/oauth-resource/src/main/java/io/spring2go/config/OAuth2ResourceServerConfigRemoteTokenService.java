@@ -16,9 +16,9 @@ public class OAuth2ResourceServerConfigRemoteTokenService extends ResourceServer
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
-                http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                    .and()
-                    .authorizeRequests().anyRequest().permitAll();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and()
+                .authorizeRequests().anyRequest().permitAll();
         // @formatter:on                
     }
 
@@ -26,6 +26,7 @@ public class OAuth2ResourceServerConfigRemoteTokenService extends ResourceServer
     @Bean
     public RemoteTokenServices tokenServices() {
         final RemoteTokenServices tokenService = new RemoteTokenServices();
+        // 对 token校验的　授权服务器地址
         tokenService.setCheckTokenEndpointUrl("http://localhost:8081/oauth/check_token");
         tokenService.setClientId("fooClientIdPassword");
         tokenService.setClientSecret("secret");
